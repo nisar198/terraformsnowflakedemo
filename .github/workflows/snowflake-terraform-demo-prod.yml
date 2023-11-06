@@ -81,4 +81,4 @@ jobs:
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform -chdir=./prod apply -auto-approve -input=false
+        run: terraform -chdir=./Terraform/prod apply -auto-approve -input=false
