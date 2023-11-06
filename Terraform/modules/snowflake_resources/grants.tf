@@ -10,10 +10,17 @@ resource "snowflake_database_role" "db_role_wr" {
   comment  = "my db role WR"
 }
 
-resource "snowflake_role_grants" "demo_role_grants"{
-    role_name= ["TF_DEMO_READER", "TF_DEMO_WR"]
-    users = "NISAR"
 
+resource "snowflake_role_grants" "demo_role_grants" {
+  role_name = snowflake_role.role.name
+
+  roles = [
+    snowflake_database_role.db_role_wr.name, snowflake_database_role.db_role.name,
+  ]
+
+  users = [
+    "NISAR"
+  ]
 }
 
 resource "snowflake_database_grant" "database_ro_grant" {
