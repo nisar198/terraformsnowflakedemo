@@ -12,10 +12,10 @@ resource "snowflake_database_role" "db_role_wr" {
 
 
 resource "snowflake_role_grants" "demo_role_grants" {
-  role_name = snowflake_role.role.name
+  role_name = snowflake_database_role.db_role.name
 
   roles = [
-    snowflake_database_role.db_role_wr.name, snowflake_database_role.db_role.name,
+    snowflake_database_role.db_role_wr.name, 
   ]
 
   users = [
