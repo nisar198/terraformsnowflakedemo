@@ -3,7 +3,7 @@ resource "snowflake_database" "tf_demo" {
   data_retention_time_in_days = var.time_travel_in_days
 }
 
-resource "snowflake_schema" "tf_demo_schema" {
+resource "snowflake_schema" "tf_schema" {
   database = snowflake_database.tf_demo.name
   name     = "TF_DEMO"
 }
