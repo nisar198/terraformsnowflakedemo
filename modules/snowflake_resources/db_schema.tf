@@ -5,6 +5,6 @@ resource "snowflake_database" "tf_demo" {
 
 resource "snowflake_schema" "tf_schema" {
   database = snowflake_database.tf_demo.name
-  name     = "SCHEMA1"
+  name     = "TF_DEMO"
 }
 
