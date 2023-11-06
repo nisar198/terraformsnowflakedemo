@@ -4,7 +4,7 @@ resource "snowflake_database" "tf_demo" {
 }
 
 resource "snowflake_schema" "tf_demo_schema" {
-  database = snowflake_database.tf_demo_database.name
+  database = snowflake_database.tf_demo.name
   name     = "TF_DEMO"
 }
 
