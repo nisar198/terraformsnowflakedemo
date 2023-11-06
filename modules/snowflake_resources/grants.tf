@@ -5,7 +5,7 @@ resource "snowflake_database_role" "db_role" {
 }
 resource "snowflake_role_grants" "demo_role_grants"{
     role_name= snowflake_database_role.db_role.name
-    users = ["NISAR"]
+    users = "NISAR"
 
 }
 
