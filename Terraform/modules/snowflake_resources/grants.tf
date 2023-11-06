@@ -1,10 +1,13 @@
 
-resource "snowflake_database_role" "db_role" {
-  database = snowflake_database.tf_demo.name
+resource "snowflake_role" "db_role" {
   name     = "TF_DEMO_WR"
   comment  = "my db role"
 }
 
+resource "snowflake_role_grants" "db_wr_grants"{
+  role_name = snowflake_role.db_role.name
+  users     = "NISAR" 
+}
 
 resource "snowflake_database_grant" "database_wr_grant" {
   database_name = snowflake_database.tf_demo.name
