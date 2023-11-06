@@ -27,25 +27,25 @@ jobs:
       
       - name: Terraform Init
         id: init
-        run: terraform -chdir=./staging init
+        run: terraform -chdir=.terraform/staging init
 
       - name: Terraform Format
         id: fmt
-        run: terraform -chdir=./staging fmt 
+        run: terraform -chdir=.terraform/staging fmt 
 
       - name: Terraform Validate
         id: validate
-        run: terraform -chdir=./staging validate -no-color
+        run: terraform -chdir=.terraform/staging validate -no-color
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=./staging plan
+        run: terraform -chdir=.terraform/staging plan
         env:
           TF_VAR_snowflake_private_key: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }} 
         
       - name: Terraform Apply
         id: apply
-        run: terraform -chdir=./staging apply -auto-approve
+        run: terraform -chdir=.terraform/staging apply -auto-approve
         env:
           TF_VAR_snowflake_private_key: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
         
