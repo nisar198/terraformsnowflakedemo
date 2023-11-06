@@ -5,10 +5,21 @@ terraform {
       version = "0.75.0"
     }
   }
-}
+
+  backend "s3" {
+    bucket = "awsterraformdemo123"
+    key    = "terraform-staging-demo.tfstate"
+    region = "eu-north-1"
+    # Optional DynamoDB for state locking. See https://developer.hashicorp.com/terraform/language/settings/backends/s3 for details.
+    # dynamodb_table = "terraform-state-lock-table"
+    encrypt = true
+    # role_arn       = "arn:aws:iam::047366754860:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"
+  }
+}  
+
 
 provider "snowflake" {
-  user = "nisar"
+  user     = "nisar"
   password = "N15ar198#?"
   account  = "ctlmpro-dn83635"
   role     = "ACCOUNTADMIN"
