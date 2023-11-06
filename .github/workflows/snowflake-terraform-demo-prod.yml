@@ -3,7 +3,7 @@ name: "PRODUCTION ENV: Snowflake Terraform Demo Workflow"
 on: 
   push:
     branches:
-      - master
+      - main
   pull_request:
 
 jobs:
@@ -42,9 +42,7 @@ jobs:
         id: plan
         if: github.event_name == 'pull_request'
         run: terraform -chdir=./prod plan -no-color -input=false
-        continue-on-error: true
-        env:
-          TF_VAR_snowflake_private_key: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+
 
       - name: Update Pull Request
         uses: actions/github-script@v6
@@ -84,5 +82,3 @@ jobs:
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform -chdir=./prod apply -auto-approve -input=false
-        env:
-          TF_VAR_snowflake_private_key: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
