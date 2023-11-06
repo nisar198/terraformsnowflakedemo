@@ -47,7 +47,7 @@ resource "snowflake_table_grant" "table_wr_grant" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
 
-  privilege = ["SELECT", "INSER", "CREATE TABLE"]
+  privilege = ["SELECT", "MODIFY", "CREATE TABLE"]
   roles     = ["TF_DEMO_WR"]
 
   on_future         = true
