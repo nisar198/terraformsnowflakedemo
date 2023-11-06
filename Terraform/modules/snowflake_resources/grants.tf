@@ -36,7 +36,7 @@ resource "snowflake_table_grant" "table_ro_grant" {
   schema_name   = snowflake_schema.tf_schema.name
 
   privilege = "SELECT"
-  roles     = ["TF_DEMO_READER"]
+  roles     = ["TF_DEMO_READER", "TF_DEMO_WR"]
 
   on_future         = true
   with_grant_option = false
@@ -47,7 +47,7 @@ resource "snowflake_table_grant" "table_wr_grant" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
 
-  privilege = "SELECT, MODIFY, CREATE TABLE"
+  privilege = "CREATE TABLE"
   roles     = ["TF_DEMO_WR"]
 
   on_future         = true
