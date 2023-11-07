@@ -33,4 +33,3 @@ module "snowflake_resources" {
   database            = var.database
   env_name            = var.env_name
 }
- 
