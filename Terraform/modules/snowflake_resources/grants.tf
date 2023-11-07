@@ -1,11 +1,11 @@
 
-resource "snowflake_role" "db_role" {
+resource "snowflake_role" "db_role_wr" {
   name     = "TF_DEMO_WR"
   comment  = "my db role"
 }
 
 resource "snowflake_role_grants" "db_wr_grants"{
-  role_name = snowflake_role.db_role.name
+  role_name = snowflake_role.db_role_wr.name
   users     = ["NISAR"] 
 }
 
@@ -21,6 +21,7 @@ resource "snowflake_schema_grant" "schema_wr_grant" {
   privilege = "USAGE"
   roles     = ["TF_DEMO_WR"]
 }
+
 
 resource "snowflake_table_grant" "table_wr_grant" {
   database_name = snowflake_database.tf_demo.name
