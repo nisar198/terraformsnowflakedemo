@@ -1,4 +1,4 @@
-use database TF_DEMO;
+use database  TF_DEMO_STAGING;
 use schema TF_DEMO;
 create table HELLO_WORLD
 (
