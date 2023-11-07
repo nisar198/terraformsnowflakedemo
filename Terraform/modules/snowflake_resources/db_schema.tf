@@ -7,4 +7,3 @@ resource "snowflake_schema" "tf_schema" {
   database = snowflake_database.tf_demo.name
   name     = "TF_DEMO"
 }
-

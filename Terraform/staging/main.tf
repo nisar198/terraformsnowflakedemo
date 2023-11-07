@@ -31,4 +31,5 @@ module "snowflake_resources" {
   time_travel_in_days = var.time_travel_in_days
   database            = var.database
   env_name            = var.env_name
+  dbr_role_wr         = var.dbr_role_wr
 }
