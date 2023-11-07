@@ -13,3 +13,8 @@ variable "time_travel_in_days" {
   description = "Number of days for time travel feature"
   default=10
 }
+
+variable "dbr_role_wr" {
+  type    = string
+  default = "TF_DEMO_WR"
+}
