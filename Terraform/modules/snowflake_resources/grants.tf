@@ -14,6 +14,12 @@ resource "snowflake_database_grant" "database_wr_grant" {
   roles     = [var.dbr_role_wr]
 }
 
+resource "snowflake_database_grant" "database_wr_grant_create_schema" {
+  database_name = snowflake_database.tf_demo.name
+  privilege = "CREATE SCHEMA"
+  roles     = [var.dbr_role_wr]
+}
+
 resource "snowflake_schema_grant" "schema_wr_grant_usage" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
