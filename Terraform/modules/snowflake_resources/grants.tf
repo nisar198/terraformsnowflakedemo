@@ -11,35 +11,30 @@ resource "snowflake_role_grants" "db_wr_grants"{
 resource "snowflake_database_grant" "database_wr_grant" {
   database_name = snowflake_database.tf_demo.name
   privilege = "USAGE"
-  roles     = ["TF_DEMO_WR_STAGING"]
+  roles     = [var.dbr_role_wr]
 }
 
-resource "snowflake_schema_grant" "schema_wr_grant" {
+resource "snowflake_schema_grant" "schema_wr_grant_usage" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
   privilege = "USAGE"
-  roles     = ["TF_DEMO_WR_STAGING"]
+  roles     = [var.dbr_role_wr]  
 }
 
-
-resource "snowflake_table_grant" "table_wr_grant" {
+resource "snowflake_schema_grant" "schema_wr_grant_usage_all" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
-
-  privilege = "SELECT"
-  roles     = ["TF_DEMO_WR_STAGING"]
-
-  on_future         = true
-  with_grant_option = false
-  #on_all            = false
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.dbr_role_wr]  
 }
+
 
 resource "snowflake_table_grant" "table_wr_grant_create_table" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
 
   privilege = "ALL PRIVILEGES"
-  roles     = ["TF_DEMO_WR_STAGING"]
+  roles     = [var.dbr_role_wr]
 
   on_future         = true
   with_grant_option = false
@@ -52,7 +47,7 @@ resource "snowflake_view_grant" "view_ro_grant" {
   schema_name   = snowflake_schema.tf_schema.name
 
   privilege = "SELECT"
-  roles     = ["TF_DEMO_WR_STAGING"]
+  roles     = [var.dbr_role_wr]
 
   on_future         = true
   with_grant_option = false
@@ -62,5 +57,5 @@ resource "snowflake_view_grant" "view_ro_grant" {
 resource "snowflake_warehouse_grant" "warehouse_grant" {
   warehouse_name = snowflake_warehouse.task_warehouse.name
   privilege      = "USAGE"
-  roles          = ["TF_DEMO_WR_STAGING"]
+  roles          = [var.dbr_role_wr]
 }
