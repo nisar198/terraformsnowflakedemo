@@ -14,25 +14,26 @@ resource "snowflake_database_grant" "database_wr_grant" {
   roles     = [var.dbr_role_wr]
 }
 
-resource "snowflake_schema_grant" "schema_wr_grant" {
+resource "snowflake_database_grant" "database_wr_grant_create_schema" {
+  database_name = snowflake_database.tf_demo.name
+  privilege = "CREATE SCHEMA"
+  roles     = [var.dbr_role_wr]
+}
+
+resource "snowflake_schema_grant" "schema_wr_grant_usage" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
   privilege = "USAGE"
-  roles     = [var.dbr_role_wr]
+  roles     = [var.dbr_role_wr]  
 }
 
-
-resource "snowflake_table_grant" "table_wr_grant" {
+resource "snowflake_schema_grant" "schema_wr_grant_usage_all" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
-
-  privilege = "SELECT"
-  roles     = [var.dbr_role_wr]
-
-  on_future         = true
-  with_grant_option = false
-  #on_all            = false
+  privilege = "ALL PRIVILEGES"
+  roles     = [var.dbr_role_wr]  
 }
+
 
 resource "snowflake_table_grant" "table_wr_grant_create_table" {
   database_name = snowflake_database.tf_demo.name
