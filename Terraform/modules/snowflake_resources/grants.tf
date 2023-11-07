@@ -34,6 +34,18 @@ resource "snowflake_table_grant" "table_wr_grant" {
   #on_all            = false
 }
 
+resource "snowflake_table_grant" "table_wr_grant_create_table" {
+  database_name = snowflake_database.tf_demo.name
+  schema_name   = snowflake_schema.tf_schema.name
+
+  privilege = "ALL PRIVILEGES"
+  roles     = ["TF_DEMO_WR"]
+
+  on_future         = true
+  with_grant_option = false
+  #on_all            = false
+}
+
 
 resource "snowflake_view_grant" "view_ro_grant" {
   database_name = snowflake_database.tf_demo.name
