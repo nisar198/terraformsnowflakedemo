@@ -14,3 +14,7 @@ variable "time_travel_in_days" {
 variable "dbr_role_wr" {
   type = string
 }
+
+variable "dbr_role_ro" {
+  type = string
+}

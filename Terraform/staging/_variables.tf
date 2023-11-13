@@ -18,3 +18,8 @@ variable "dbr_role_wr" {
   type    = string
   default = "TF_DEMO_WR_STAGING"
 }
+
+variable "dbr_role_ro" {
+  type = string
+  default = "TF_DEMO_RO_STAGING"
+}

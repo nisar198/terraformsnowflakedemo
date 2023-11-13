@@ -21,7 +21,7 @@ terraform {
 provider "snowflake" {
   user     = "nisar"
   password = "N15ar198#?"
-  account  = "ctlmpro-dn83635"
+  account  = "wytnjkv-jj20993"
   role     = "ACCOUNTADMIN"
   #private_key = var.snowflake_private_key
 }
@@ -32,4 +32,5 @@ module "snowflake_resources" {
   database            = var.database
   env_name            = var.env_name
   dbr_role_wr         = var.dbr_role_wr
+  dbr_role_ro         = var.dbr_role_ro
 }

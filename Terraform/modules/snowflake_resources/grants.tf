@@ -1,17 +1,50 @@
 resource "snowflake_role" "db_role_wr" {  
   name     = var.dbr_role_wr
-  comment  = "my db role"
+  comment  = "my db read write role"
 }
+
+resource "snowflake_role" "db_role_ro" {  
+  name     = var.dbr_role_ro
+  comment  = "my db read role"
+}
+
 
 resource "snowflake_role_grants" "db_wr_grants"{
   role_name = snowflake_role.db_role_wr.name
   users     = ["NISAR"] 
 }
 
+resource "snowflake_role_grants" "db_ro_grants"{
+  role_name = snowflake_role.db_role_ro.name
+  users     = ["NISAR"] 
+}
+
+resource "snowflake_role_grants" "grants_syadmin" {
+  role_name = snowflake_role.db_role_wr.name
+
+  roles = [
+     "SYSADMIN",
+  ]
+
+  
+}
+
+
+resource "snowflake_role_grants" "grants" {
+  role_name =  snowflake_role.db_role_ro.name
+
+  roles = [
+     snowflake_role.db_role_wr.name,
+  ]
+
+  
+}
+
+
 resource "snowflake_database_grant" "database_wr_grant" {
   database_name = snowflake_database.tf_demo.name
   privilege = "USAGE"
-  roles     = [var.dbr_role_wr]
+  roles     = [var.dbr_role_wr, snowflake_role.db_role_ro.name,]
 }
 
 resource "snowflake_database_grant" "database_wr_grant_create_schema" {
@@ -24,7 +57,7 @@ resource "snowflake_schema_grant" "schema_wr_grant_usage" {
   database_name = snowflake_database.tf_demo.name
   schema_name   = snowflake_schema.tf_schema.name
   privilege = "USAGE"
-  roles     = [var.dbr_role_wr]  
+  roles     = [var.dbr_role_wr,snowflake_role.db_role_ro.name]  
 }
 
 resource "snowflake_schema_grant" "schema_wr_grant_usage_all" {
@@ -53,7 +86,7 @@ resource "snowflake_view_grant" "view_ro_grant" {
   schema_name   = snowflake_schema.tf_schema.name
 
   privilege = "SELECT"
-  roles     = [var.dbr_role_wr]
+  roles     = [var.dbr_role_wr, snowflake_role.db_role_ro.name]
 
   on_future         = true
   with_grant_option = false
@@ -63,5 +96,5 @@ resource "snowflake_view_grant" "view_ro_grant" {
 resource "snowflake_warehouse_grant" "warehouse_grant" {
   warehouse_name = snowflake_warehouse.task_warehouse.name
   privilege      = "USAGE"
-  roles          = [var.dbr_role_wr]
+  roles          = [var.dbr_role_wr, snowflake_role.db_role_ro.name]
 }
