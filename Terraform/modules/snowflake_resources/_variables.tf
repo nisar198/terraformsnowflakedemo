@@ -11,10 +11,32 @@ variable "time_travel_in_days" {
   description = "Number of days for time travel feature"
 }
 
-variable "dbr_role_wr" {
-  type = string
+variable "functional_role_developer" {
+  type    = string
+  default = "SNOWFLAKE_DEVELOPER"
 }
 
-variable "dbr_role_ro" {
-  type = string
+variable "functional_role_analyst" {
+  type    = string
+  default = "SNOWFLAKE_ANALYST"
+}
+
+variable "functional_role_end_user" {
+  type    = string
+  
+}
+
+variable "functional_role_data_scientist" {
+  type    = string
+  
+}
+
+variable "functional_domain_accounts_transactions" {
+  type    = string
+  
+}
+
+variable "functional_domain_accounts_transactions_pu" {
+  type    = string
+  
 }

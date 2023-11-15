@@ -1,6 +1,6 @@
 variable "database" {
   type    = string
-  default = "TF_DEMO_STAGING"
+  default = "ACCOUNTS_TRANSACTIONS_STAGING"
 }
 
 variable "env_name" {
@@ -14,12 +14,34 @@ variable "time_travel_in_days" {
   default     = 1
 }
 
-variable "dbr_role_wr" {
+variable "functional_role_developer" {
   type    = string
-  default = "TF_DEMO_WR_STAGING"
+  default = "SNOWFLAKE_DEVELOPER"
 }
 
-variable "dbr_role_ro" {
-  type = string
-  default = "TF_DEMO_RO_STAGING"
+variable "functional_role_analyst" {
+  type    = string
+  default = "SNOWFLAKE_ANALYST"
 }
+
+variable "functional_role_end_user" {
+  type    = string
+  default = "SNOWFLAKE_END_USER"
+}
+
+variable "functional_role_data_scientist" {
+  type    = string
+  default = "SNOWFLAKE_DATA_SCIENTIST"
+}
+
+variable "functional_domain_accounts_transactions" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS"
+}
+
+variable "functional_domain_accounts_transactions_pu" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS_PU"
+}
+
+

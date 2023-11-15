@@ -13,24 +13,29 @@ terraform {
     # dynamodb_table = "terraform-state-lock-table"
     encrypt = true
     # role_arn       = "arn:aws:iam::047366754860:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing"
-  }  
+  }
 
-}  
+}
 
 
 provider "snowflake" {
+  
   user     = "nisar"
   password = "N15ar198#?"
   account  = "wytnjkv-jj20993"
-  role     = "ACCOUNTADMIN"
+  role     = "SYSADMIN"
   #private_key = var.snowflake_private_key
 }
 
 module "snowflake_resources" {
-  source              = "../modules/snowflake_resources"
-  time_travel_in_days = var.time_travel_in_days
-  database            = var.database
-  env_name            = var.env_name
-  dbr_role_wr         = var.dbr_role_wr
-  dbr_role_ro         = var.dbr_role_ro
+  source                                     = "../modules/snowflake_resources"
+  time_travel_in_days                        = var.time_travel_in_days
+  database                                   = var.database
+  env_name                                   = var.env_name
+  functional_role_developer                  = var.functional_role_developer
+  functional_role_analyst                    = var.functional_role_analyst
+  functional_role_end_user                   = var.functional_role_end_user
+  functional_role_data_scientist             = var.functional_role_data_scientist
+  functional_domain_accounts_transactions    = var.functional_domain_accounts_transactions
+  functional_domain_accounts_transactions_pu = var.functional_domain_accounts_transactions_pu
 }
