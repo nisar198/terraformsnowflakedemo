@@ -1,6 +1,6 @@
 variable "database" {
   type    = string
-  default = "TF_DEMO_STAGING"
+  default = "ACCOUNTS_TRANSACTIONS_STAGING"
 }
 
 variable "env_name" {
@@ -14,12 +14,53 @@ variable "time_travel_in_days" {
   default     = 1
 }
 
-variable "dbr_role_wr" {
+variable "functional_role_developer" {
   type    = string
-  default = "TF_DEMO_WR_STAGING"
+  default = "SNOWFLAKE_DEVELOPER_STG"
 }
 
-variable "dbr_role_ro" {
-  type = string
-  default = "TF_DEMO_RO_STAGING"
+variable "functional_role_analyst" {
+  type    = string
+  default = "SNOWFLAKE_ANALYST_STAG"
+}
+
+variable "functional_role_end_user" {
+  type    = string
+  default = "SNOWFLAKE_END_USER_STG"
+}
+
+variable "functional_role_data_scientist" {
+  type    = string
+  default = "SNOWFLAKE_DATA_SCIENTIST_STG"
+}
+
+variable "functional_domain_accounts_transactions" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS_STG"
+}
+
+variable "functional_domain_accounts_transactions_pu" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS_PU_STG"
+}
+
+
+variable "access_level_staging_sr" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS_STAGE_SR_STG"
+}
+
+variable "access_level_core_sr" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS_CORE_SR_STG"
+}
+
+variable "access_level_dataset_sr" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS_DATASET_SR_STG"
+}
+
+variable "access_level_dataset_all" {
+  type    = string
+  default = "ACCOUNTS_TRANSACTIONS_DATASET_All_STG"
 }
