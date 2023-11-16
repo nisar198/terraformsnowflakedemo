@@ -38,4 +38,9 @@ module "snowflake_resources" {
   functional_role_data_scientist             = var.functional_role_data_scientist
   functional_domain_accounts_transactions    = var.functional_domain_accounts_transactions
   functional_domain_accounts_transactions_pu = var.functional_domain_accounts_transactions_pu
+  access_level_staging_sr                   = var.access_level_staging_sr
+  access_level_core_sr                       = var.access_level_core_sr
+  access_level_dataset_sr                    = var.access_level_dataset_sr
+  access_level_dataset_all                   = var.access_level_dataset_all
+
 }

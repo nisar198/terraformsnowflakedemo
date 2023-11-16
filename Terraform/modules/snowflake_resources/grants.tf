@@ -107,7 +107,7 @@ resource "snowflake_role_grants" "functiondomain_su_to_syadmin" {
 #5.1 create readod only role for the stage schema
 resource "snowflake_role" "access_level_stag_sr" {
   provider = snowflake.user_admin  
-  name     = "ACCOUNTS_TRANSACTIONS_STAGE_SR"
+  name     = var.access_level_staging_sr
   comment  = "access level role stage sr"
 }
 
@@ -117,7 +117,7 @@ resource "snowflake_role" "access_level_core_sr" {
 
   provider = snowflake.user_admin
   #database = snowflake_database.accounts_transactions.name
-  name     = "ACCOUNTS_TRANSACTIONS_CORE_SR"
+  name     = var.access_level_core_sr
   comment  = "access level role"
 }
 
@@ -125,7 +125,7 @@ resource "snowflake_role" "access_level_core_sr" {
 resource "snowflake_role" "access_level_dataset_sr" {
   provider = snowflake.user_admin
   #database = snowflake_database.accounts_transactions.name
-  name     = "ACCOUNTS_TRANSACTIONS_DATASET_SR"
+  name     = var.access_level_dataset_sr
   comment  = "access level role"
 }
 
@@ -133,7 +133,7 @@ resource "snowflake_role" "access_level_dataset_sr" {
 resource "snowflake_role" "access_level_dataset_all" {
   provider = snowflake.user_admin
   #database = snowflake_database.accounts_transactions.name
-  name     = "ACCOUNTS_TRANSACTIONS_DATASET_All"
+  name     = var.access_level_dataset_all
   comment  = "access level role"
 }
 
@@ -245,7 +245,7 @@ resource "snowflake_view_grant" "view_ro_grant_staging" {
 }
 
 #9.2 grant select on all table in stage schema to stage_sr read only role
-resource "snowflake_table_grant" "table_ro_grant_to_access_level" {
+resource "snowflake_table_grant" "table_ro_grant_to_stage_access_level" {
   provider = snowflake.account_admin
   database_name = snowflake_database.accounts_transactions.name
   schema_name   = snowflake_schema.stage.name
@@ -274,9 +274,16 @@ resource "snowflake_table_grant" "table_all_grant_to_access_level" {
 
 
 
-resource "snowflake_user" "user" {
+resource "snowflake_user" "user_analyst" {
   provider = snowflake.account_admin
   name         = "ANALYST_USER"
+  password     = "nisar198"
+  
+}
+
+resource "snowflake_user" "user_developer" {
+  provider = snowflake.account_admin
+  name         = "DEVELOPER_USER"
   password     = "nisar198"
   
 }
@@ -286,6 +293,11 @@ resource "snowflake_role_grants" "db_wr_grants"{
   users     = ["ANALYST_USER"] 
 }
 
+resource "snowflake_role_grants" "db_wr_DEVELOP_grants"{
+  provider = snowflake.user_admin
+  role_name = snowflake_role.developer.name
+  users     = ["DEVELOPER_USER"] 
+}
 
 #resource "snowflake_role_grants" "db_wr_grantst_sr"{
  # provider = snowflake.user_admin

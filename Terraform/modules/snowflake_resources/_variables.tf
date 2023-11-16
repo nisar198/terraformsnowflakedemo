@@ -40,3 +40,20 @@ variable "functional_domain_accounts_transactions_pu" {
   type    = string
   
 }
+
+
+variable "access_level_staging_sr" {
+  type    = string  
+}
+
+variable "access_level_core_sr" {
+  type    = string  
+}
+
+variable "access_level_dataset_sr" {
+  type    = string
+}
+
+variable "access_level_dataset_all" {
+  type    = string  
+}
