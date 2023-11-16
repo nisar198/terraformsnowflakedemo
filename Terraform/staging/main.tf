@@ -19,7 +19,7 @@ terraform {
 
 
 provider "snowflake" {
-  
+
   user     = "nisar"
   password = "N15ar198#?"
   account  = "wytnjkv-jj20993"

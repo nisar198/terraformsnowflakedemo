@@ -6,18 +6,7 @@ provider "snowflake" {
   role     = "USERADMIN"
   #private_key = var.snowflake_private_key
 }
-resource "snowflake_role" "functional_domain_readonly" { 
-  provider = snowflake.user_admin 
-  name     = var.functional_domain_accounts_transactions
-  comment  = "snowflake function domain role example : ACCOUNTS_TRANSACTIONS read only"
-}
-
-resource "snowflake_role" "functional_domain_supper_user" { 
-  provider = snowflake.user_admin
-  name     = var.functional_domain_accounts_transactions_pu
-  comment  = "snowflake function domain role power user, example ACCOUNTS_TRANSACTIONS_pu"
-}
-
+#1 Functional role
 resource "snowflake_role" "developer" { 
   provider = snowflake.user_admin 
   name     = var.functional_role_developer
@@ -43,26 +32,7 @@ resource "snowflake_role" "end_user" {
 }
 
 
-# grant functional domain role to sysadmin
-resource "snowflake_role_grants" "functiondomain_ro_to_syadmin" {
-  provider = snowflake.user_admin
-  role_name = snowflake_role.functional_domain_readonly.name
-
-  roles = [
-     "SYSADMIN",
-  ]  
-}
-
-resource "snowflake_role_grants" "functiondomain_su_to_syadmin" {
-  provider = snowflake.user_admin
-  role_name = snowflake_role.functional_domain_supper_user.name
-
-  roles = [
-     "SYSADMIN",
-  ]  
-}
-
-# grant functional role to sysadmin
+#2 grant functional role to sysadmin
 resource "snowflake_role_grants" "syadmin_to_developer" {
   provider = snowflake.account_admin
   role_name = "SYSADMIN"
@@ -99,17 +69,42 @@ resource "snowflake_role_grants" "end_user_to_syadmin" {
   ]  
 }
 
-#resource "snowflake_role_grants" "sysadmin_to_developer" {#
- # provider = snowflake.account_admin
-  #role_name = "SYSADMIN"
 
-  #roles = [
-  #   snowflake_role.developer.name,
-  #]  
-#}
+#3 create functional domain role 
+resource "snowflake_role" "functional_domain_readonly" { 
+  provider = snowflake.user_admin 
+  name     = var.functional_domain_accounts_transactions
+  comment  = "snowflake function domain role example : ACCOUNTS_TRANSACTIONS read only"
+}
+
+resource "snowflake_role" "functional_domain_supper_user" { 
+  provider = snowflake.user_admin
+  name     = var.functional_domain_accounts_transactions_pu
+  comment  = "snowflake function domain role power user, example ACCOUNTS_TRANSACTIONS_pu"
+}
+
+#4 grant functional domain role to sysadmin
+resource "snowflake_role_grants" "functiondomain_ro_to_syadmin" {
+  provider = snowflake.user_admin
+  role_name = snowflake_role.functional_domain_readonly.name
+
+  roles = [
+     "SYSADMIN",
+  ]  
+}
+
+resource "snowflake_role_grants" "functiondomain_su_to_syadmin" {
+  provider = snowflake.user_admin
+  role_name = snowflake_role.functional_domain_supper_user.name
+
+  roles = [
+     "SYSADMIN",
+  ]  
+}
 
 
-# create data access level roles
+#5 create data access level role for each of the snowflake database schema
+#5.1 create readod only role for the stage schema
 resource "snowflake_role" "access_level_stag_sr" {
   provider = snowflake.user_admin  
   name     = "ACCOUNTS_TRANSACTIONS_STAGE_SR"
@@ -117,7 +112,7 @@ resource "snowflake_role" "access_level_stag_sr" {
 }
 
 
-
+#5.2 create read only role for the core schema
 resource "snowflake_role" "access_level_core_sr" {
 
   provider = snowflake.user_admin
@@ -126,6 +121,7 @@ resource "snowflake_role" "access_level_core_sr" {
   comment  = "access level role"
 }
 
+#5.3 create read only role for the dataset schema
 resource "snowflake_role" "access_level_dataset_sr" {
   provider = snowflake.user_admin
   #database = snowflake_database.accounts_transactions.name
@@ -133,6 +129,7 @@ resource "snowflake_role" "access_level_dataset_sr" {
   comment  = "access level role"
 }
 
+#5.4 create read write role for the dataset schema
 resource "snowflake_role" "access_level_dataset_all" {
   provider = snowflake.user_admin
   #database = snowflake_database.accounts_transactions.name
@@ -140,7 +137,8 @@ resource "snowflake_role" "access_level_dataset_all" {
   comment  = "access level role"
 }
 
-# stage_sr role to functional domain REAONLY roles e.g developer, data scientist
+
+#6 stage_sr role to functional domain (and domain role) REAONLY roles e.g developer, data scientist
 resource "snowflake_role_grants" "access_level_stag_to_function_domain" {
   provider = snowflake.user_admin
   role_name = snowflake_role.access_level_stag_sr.name
@@ -151,6 +149,7 @@ resource "snowflake_role_grants" "access_level_stag_to_function_domain" {
   ]  
 }
 
+#6.1 core readonly role to functional doamin and domain role)
 resource "snowflake_role_grants" "access_level_core_to_function_domain" {
   provider = snowflake.user_admin
   role_name = snowflake_role.access_level_core_sr.name
@@ -161,6 +160,7 @@ resource "snowflake_role_grants" "access_level_core_to_function_domain" {
   ]  
 }
 
+#6.2 dataset readonly role to functional doamin and domain role)
 resource "snowflake_role_grants" "access_level_dataset_to_function_domain" {
   provider = snowflake.user_admin
   role_name = snowflake_role.access_level_dataset_sr.name
@@ -171,10 +171,20 @@ resource "snowflake_role_grants" "access_level_dataset_to_function_domain" {
   ]  
 }
 
+#6.3 dataset ALL role to only developer, data scientist and analyst functional role
+resource "snowflake_role_grants" "access_level_dataset_all_to_function_domain" {
+  provider = snowflake.user_admin
+  role_name = snowflake_role.access_level_dataset_all.name
+
+  roles = [
+    snowflake_role.developer.name ,snowflake_role.data_scientist.name, snowflake_role.analyst.name,snowflake_role.functional_domain_supper_user.name
+    ,
+  ]  
+}
 
 
 
-# grant database usage to access level roles
+#7 grant database usage to access level roles
 
 resource "snowflake_database_grant" "database_wr_grant" {
   provider = snowflake.sysadmin
@@ -184,7 +194,8 @@ resource "snowflake_database_grant" "database_wr_grant" {
   snowflake_role.access_level_dataset_sr.name, snowflake_role.access_level_dataset_all.name]
 }
 
-## grant schema usage to access level roles 
+#8 grant schema usage to access level roles to thier own respective schema
+#8.1 stage role to stage schema
 resource "snowflake_schema_grant" "to_stage" {
   provider = snowflake.sysadmin
   database_name = snowflake_database.accounts_transactions.name
@@ -192,7 +203,7 @@ resource "snowflake_schema_grant" "to_stage" {
   privilege = "USAGE"
   roles     = [snowflake_role.access_level_stag_sr.name]  
 }
-
+#8.2 core role to core schema
 resource "snowflake_schema_grant" "to_core" {
   provider = snowflake.sysadmin
   database_name = snowflake_database.accounts_transactions.name
@@ -201,6 +212,7 @@ resource "snowflake_schema_grant" "to_core" {
   roles     = [snowflake_role.access_level_core_sr.name ]  
 }
 
+#8.3 dataset role to dataset schema usage
 resource "snowflake_schema_grant" "to_dataset" {
   provider = snowflake.sysadmin
   database_name = snowflake_database.accounts_transactions.name
@@ -209,36 +221,7 @@ resource "snowflake_schema_grant" "to_dataset" {
   roles     = [snowflake_role.access_level_dataset_sr.name ]  
 }
 
-## grant select on all views and tabled
-
-resource "snowflake_view_grant" "view_ro_grant_staging" {
-  provider = snowflake.account_admin
-  database_name = snowflake_database.accounts_transactions.name
-  schema_name   = snowflake_schema.stage.name
-
-  privilege = "SELECT"
-  roles     = [snowflake_role.access_level_stag_sr.name, snowflake_role.access_level_core_sr.name, snowflake_role.access_level_dataset_sr.name, snowflake_role.access_level_dataset_all.name ]
-
-  on_future         = true
-  with_grant_option = false
-  on_all            = false
-}
-
-resource "snowflake_table_grant" "table_ro_grant_to_access_level" {
-  provider = snowflake.account_admin
-  database_name = snowflake_database.accounts_transactions.name
-  schema_name   = snowflake_schema.stage.name
-
-  privilege = "SELECT"
-  roles     = [snowflake_role.access_level_stag_sr.name, snowflake_role.access_level_core_sr.name, snowflake_role.access_level_dataset_sr.name, snowflake_role.access_level_dataset_all.name]
-  on_future         = true
-  with_grant_option = false
- # on_all            = false
-}
-
-
-
-
+# 8.4 grant usage on warhouse to functional domain role
 resource "snowflake_warehouse_grant" "warehouse_grant" {
   provider = snowflake.sysadmin
   warehouse_name = snowflake_warehouse.task_warehouse.name
@@ -246,13 +229,68 @@ resource "snowflake_warehouse_grant" "warehouse_grant" {
   roles          = [snowflake_role.developer.name,snowflake_role.analyst.name,snowflake_role.data_scientist.name,snowflake_role.end_user.name]
 }
 
+#9 grant select access level roles to the objects
+#9.1 grant select  on all views in stage schema to stage_sr read only role
+resource "snowflake_view_grant" "view_ro_grant_staging" {
+  provider = snowflake.account_admin
+  database_name = snowflake_database.accounts_transactions.name
+  schema_name   = snowflake_schema.stage.name
+
+  privilege = "SELECT"
+  roles     = [snowflake_role.access_level_stag_sr.name]
+
+  on_future         = true
+  with_grant_option = false
+  on_all            = false
+}
+
+#9.2 grant select on all table in stage schema to stage_sr read only role
+resource "snowflake_table_grant" "table_ro_grant_to_access_level" {
+  provider = snowflake.account_admin
+  database_name = snowflake_database.accounts_transactions.name
+  schema_name   = snowflake_schema.stage.name
+
+  privilege = "SELECT"
+  roles     = [snowflake_role.access_level_stag_sr.name]
+  #, snowflake_role.access_level_core_sr.name, snowflake_role.access_level_dataset_sr.name, snowflake_role.access_level_dataset_all.name]
+  on_future         = true
+  with_grant_option = false
+ # on_all            = true
+}
+
+
+# grant all privillege on dataset schema to dataset all role
+resource "snowflake_table_grant" "table_all_grant_to_access_level" {
+  provider = snowflake.account_admin
+  database_name = snowflake_database.accounts_transactions.name
+  schema_name   = snowflake_schema.dataset.name 
+
+  privilege = "ALL PRIVILEGES"
+  roles     = [snowflake_role.access_level_dataset_all.name]
+  on_future         = true
+  with_grant_option = false
+  #on_all            = true
+}
+
+
+
+resource "snowflake_user" "user" {
+  provider = snowflake.account_admin
+  name         = "ANALYST_USER"
+  password     = "nisar198"
+  
+}
 resource "snowflake_role_grants" "db_wr_grants"{
   provider = snowflake.user_admin
   role_name = snowflake_role.analyst.name
-  users     = ["NISAR"] 
+  users     = ["ANALYST_USER"] 
 }
-resource "snowflake_role_grants" "db_wr_grantst_sr"{
-  provider = snowflake.user_admin
-  role_name = snowflake_role.developer.name
-  users     = ["NISAR"] 
-}
+
+
+#resource "snowflake_role_grants" "db_wr_grantst_sr"{
+ # provider = snowflake.user_admin
+  #role_name = snowflake_role.developer.name
+  #users     = ["NISAR"] 
+#}
+
+
